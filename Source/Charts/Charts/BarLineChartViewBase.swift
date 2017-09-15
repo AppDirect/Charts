@@ -398,9 +398,10 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
                     offsetBottom += min(_legend.neededHeight, _viewPortHandler.chartHeight * _legend.maxSizePercent) + _legend.yOffset
                     if xAxis.isEnabled && xAxis.isDrawLabelsEnabled
                     {
-                        offsetBottom += xAxis.labelRotatedHeight
+                        // RF: Fix for issue reported here: https://github.com/danielgindi/Charts/issues/2225
+                        offsetBottom += minOffset   // xAxis.labelRotatedHeight
                     }
-                    
+
                 default:
                     break
                 }
@@ -531,14 +532,17 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
             if !self.isHighLightPerTapEnabled { return }
             
             let h = getHighlightByTouchPoint(recognizer.location(in: self))
-            
-            if h === nil || h!.isEqual(self.lastHighlighted)
-            {
+
+            // determine if tap is inside of content area, otherwise ignore highlight action (i.e. tap on legend)
+            let tapLocation = recognizer.location(in: self)
+            let heightWithAxis = self.viewPortHandler.chartHeight - self.legend.neededHeight - self.legend.yOffset
+            var contentRect = self.contentRect
+            contentRect = CGRect(x: contentRect.origin.x, y: 0, width: contentRect.size.width, height: heightWithAxis)
+
+            if h === nil || h!.isEqual(self.lastHighlighted) || !contentRect.contains(tapLocation) {
                 self.highlightValue(nil, callDelegate: true)
                 self.lastHighlighted = nil
-            }
-            else
-            {
+            } else {
                 self.highlightValue(h, callDelegate: true)
                 self.lastHighlighted = h
             }
