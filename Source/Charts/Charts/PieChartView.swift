@@ -58,6 +58,7 @@ open class PieChartView: PieRadarChartViewBase
     ///
     /// **default**: `0.5`
     fileprivate var _holeRadiusPercent = CGFloat(0.5)
+    fileprivate var _holeRadiusPercentHighlighted = CGFloat(0.5)
     
     fileprivate var _transparentCircleColor: NSUIColor? = NSUIColor(white: 1.0, alpha: 105.0/255.0)
     
@@ -494,6 +495,19 @@ open class PieChartView: PieRadarChartViewBase
         set
         {
             _holeRadiusPercent = newValue
+            setNeedsDisplay()
+        }
+    }
+
+    open var holeRadiusPercentHighlighted: CGFloat
+        {
+        get
+        {
+            return _holeRadiusPercentHighlighted
+        }
+        set
+        {
+            _holeRadiusPercentHighlighted = newValue
             setNeedsDisplay()
         }
     }
