@@ -13,11 +13,11 @@ import Foundation
 
 open class CombinedChartData: BarLineScatterCandleBubbleChartData
 {
-    fileprivate var _lineData: LineChartData!
-    fileprivate var _barData: BarChartData!
-    fileprivate var _scatterData: ScatterChartData!
-    fileprivate var _candleData: CandleChartData!
-    fileprivate var _bubbleData: BubbleChartData!
+    private var _lineData: LineChartData!
+    private var _barData: BarChartData!
+    private var _scatterData: ScatterChartData!
+    private var _candleData: CandleChartData!
+    private var _bubbleData: BubbleChartData!
     
     public override init()
     {
@@ -278,22 +278,20 @@ open class CombinedChartData: BarLineScatterCandleBubbleChartData
         {
             return nil
         }
-        else
+        
+        // The value of the highlighted entry could be NaN - if we are not interested in highlighting a specific value.
+        let entries = data.getDataSetByIndex(highlight.dataSetIndex).entriesForXValue(highlight.x)
+        for e in entries
         {
-            // The value of the highlighted entry could be NaN - if we are not interested in highlighting a specific value.
-            let entries = data.getDataSetByIndex(highlight.dataSetIndex).entriesForXValue(highlight.x)
-            for e in entries
+            if e.y == highlight.y || highlight.y.isNaN
             {
-                if e.y == highlight.y || highlight.y.isNaN
-                {
-                    return e
-                }
+                return e
             }
-            return nil
         }
+        return nil
     }
     
-    /// get data set for highlight
+    /// Get dataset for highlight
     ///
     /// - Parameter highlight: current highlight
     /// - Returns: dataset related to highlight
@@ -310,9 +308,7 @@ open class CombinedChartData: BarLineScatterCandleBubbleChartData
         {
             return nil
         }
-        else
-        {
-            return data.dataSets[highlight.dataSetIndex]
-        }
+        
+        return data.dataSets[highlight.dataSetIndex]
     }
 }
