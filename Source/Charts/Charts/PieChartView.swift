@@ -57,7 +57,6 @@ open class PieChartView: PieRadarChartViewBase
     /// indicates the size of the hole in the center of the piechart
     ///
     /// **default**: `0.5`
-
     private var _holeRadiusPercent = CGFloat(0.5)
     private var _holeRadiusPercentHighlighted = CGFloat(0.5)
     
