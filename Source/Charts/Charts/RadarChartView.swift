@@ -81,7 +81,7 @@ open class RadarChartView: PieRadarChartViewBase
     open override func notifyDataSetChanged()
     {
         calcMinMax()
-        
+
         _yAxisRenderer?.computeAxis(min: _yAxis._axisMinimum, max: _yAxis._axisMaximum, inverted: _yAxis.isInverted)
         _xAxisRenderer?.computeAxis(min: _xAxis._axisMinimum, max: _xAxis._axisMaximum, inverted: false)
         
@@ -89,7 +89,7 @@ open class RadarChartView: PieRadarChartViewBase
             let legend = _legend,
             !legend.isLegendCustom
         {
-            _legendRenderer?.computeLegend(data: data)
+            legendRenderer?.computeLegend(data: data)
         }
         
         calculateOffsets()
@@ -139,14 +139,14 @@ open class RadarChartView: PieRadarChartViewBase
 
         renderer.drawValues(context: context)
 
-        _legendRenderer.renderLegend(context: context)
+        legendRenderer.renderLegend(context: context)
 
         drawDescription(context: context)
 
         drawMarkers(context: context)
     }
 
-    /// - returns: The factor that is needed to transform values into pixels.
+    /// The factor that is needed to transform values into pixels.
     @objc open var factor: CGFloat
     {
         let content = _viewPortHandler.contentRect
@@ -154,7 +154,7 @@ open class RadarChartView: PieRadarChartViewBase
                 / CGFloat(_yAxis.axisRange)
     }
 
-    /// - returns: The angle that each slice in the radar chart occupies.
+    /// The angle that each slice in the radar chart occupies.
     @objc open var sliceAngle: CGFloat
     {
         return 360.0 / CGFloat(_data?.maxEntryCountSet?.entryCount ?? 0)
@@ -185,7 +185,7 @@ open class RadarChartView: PieRadarChartViewBase
         return index
     }
 
-    /// - returns: The object that represents all y-labels of the RadarChart.
+    /// The object that represents all y-labels of the RadarChart.
     @objc open var yAxis: YAxis
     {
         return _yAxis
@@ -221,12 +221,12 @@ open class RadarChartView: PieRadarChartViewBase
         return min(content.width / 2.0, content.height / 2.0)
     }
 
-    /// - returns: The maximum value this chart can display on it's y-axis.
+    /// The maximum value this chart can display on it's y-axis.
     open override var chartYMax: Double { return _yAxis._axisMaximum }
     
-    /// - returns: The minimum value this chart can display on it's y-axis.
+    /// The minimum value this chart can display on it's y-axis.
     open override var chartYMin: Double { return _yAxis._axisMinimum }
     
-    /// - returns: The range of y-values this chart can display.
+    /// The range of y-values this chart can display.
     @objc open var yRange: Double { return _yAxis.axisRange }
 }

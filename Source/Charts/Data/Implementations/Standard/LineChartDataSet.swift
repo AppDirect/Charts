@@ -64,50 +64,10 @@ open class LineChartDataSet: LineRadarChartDataSet, ILineChartDataSet
         }
         set
         {
-            _cubicIntensity = newValue
-            if _cubicIntensity > 1.0
-            {
-                _cubicIntensity = 1.0
-            }
-            if _cubicIntensity < 0.05
-            {
-                _cubicIntensity = 0.05
-            }
+            _cubicIntensity = newValue.clamped(to: 0.05...1)
         }
     }
-    
-    @available(*, deprecated: 1.0, message: "Use `mode` instead.")
-    open var drawCubicEnabled: Bool
-    {
-        get
-        {
-            return mode == .cubicBezier
-        }
-        set
-        {
-            mode = newValue ? LineChartDataSet.Mode.cubicBezier : LineChartDataSet.Mode.linear
-        }
-    }
-    
-    @available(*, deprecated: 1.0, message: "Use `mode` instead.")
-    open var isDrawCubicEnabled: Bool { return drawCubicEnabled }
-    
-    @available(*, deprecated: 1.0, message: "Use `mode` instead.")
-    open var drawSteppedEnabled: Bool
-    {
-        get
-        {
-            return mode == .stepped
-        }
-        set
-        {
-            mode = newValue ? LineChartDataSet.Mode.stepped : LineChartDataSet.Mode.linear
-        }
-    }
-    
-    @available(*, deprecated: 1.0, message: "Use `mode` instead.")
-    open var isDrawSteppedEnabled: Bool { return drawSteppedEnabled }
-    
+        
     /// The radius of the drawn circles.
     open var circleRadius = CGFloat(8.0)
     
@@ -116,7 +76,7 @@ open class LineChartDataSet: LineRadarChartDataSet, ILineChartDataSet
     
     open var circleColors = [NSUIColor]()
     
-    /// - returns: The color at the given index of the DataSet's circle-color array.
+    /// - Returns: The color at the given index of the DataSet's circle-color array.
     /// Performs a IndexOutOfBounds check by modulus.
     open func getCircleColor(atIndex index: Int) -> NSUIColor?
     {
@@ -152,7 +112,7 @@ open class LineChartDataSet: LineRadarChartDataSet, ILineChartDataSet
     /// If true, drawing circles is enabled
     open var drawCirclesEnabled = true
     
-    /// - returns: `true` if drawing circles for this DataSet is enabled, `false` ifnot
+    /// `true` if drawing circles for this DataSet is enabled, `false` ifnot
     open var isDrawCirclesEnabled: Bool { return drawCirclesEnabled }
     
     /// The color of the inner circle (the circle-hole).
@@ -161,7 +121,7 @@ open class LineChartDataSet: LineRadarChartDataSet, ILineChartDataSet
     /// `true` if drawing circles for this DataSet is enabled, `false` ifnot
     open var drawCircleHoleEnabled = true
     
-    /// - returns: `true` if drawing the circle-holes is enabled, `false` ifnot.
+    /// `true` if drawing the circle-holes is enabled, `false` ifnot.
     open var isDrawCircleHoleEnabled: Bool { return drawCircleHoleEnabled }
     
     /// This is how much (in pixels) into the dash pattern are we starting from.
@@ -193,11 +153,13 @@ open class LineChartDataSet: LineRadarChartDataSet, ILineChartDataSet
     
     // MARK: NSCopying
     
-    open override func copyWithZone(_ zone: NSZone?) -> AnyObject
+    open override func copy(with zone: NSZone? = nil) -> Any
     {
-        let copy = super.copyWithZone(zone) as! LineChartDataSet
+        let copy = super.copy(with: zone) as! LineChartDataSet
         copy.circleColors = circleColors
+        copy.circleHoleColor = circleHoleColor
         copy.circleRadius = circleRadius
+        copy.circleHoleRadius = circleHoleRadius
         copy.cubicIntensity = cubicIntensity
         copy.lineDashPhase = lineDashPhase
         copy.lineDashLengths = lineDashLengths
@@ -205,6 +167,7 @@ open class LineChartDataSet: LineRadarChartDataSet, ILineChartDataSet
         copy.drawCirclesEnabled = drawCirclesEnabled
         copy.drawCircleHoleEnabled = drawCircleHoleEnabled
         copy.mode = mode
+        copy._fillFormatter = _fillFormatter
         return copy
     }
 }

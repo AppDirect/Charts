@@ -119,7 +119,7 @@ open class PieChartView: PieRadarChartViewBase
         
         renderer.drawValues(context: context)
         
-        _legendRenderer.renderLegend(context: context)
+        legendRenderer.renderLegend(context: context)
         
         drawDescription(context: context)
         
@@ -280,7 +280,7 @@ open class PieChartView: PieRadarChartViewBase
         return -1 // return -1 if no index found
     }
     
-    /// - returns: The index of the DataSet this x-index belongs to.
+    /// - Returns: The index of the DataSet this x-index belongs to.
     @objc open func dataSetIndexForIndex(_ xValue: Double) -> Int
     {
         var dataSets = _data?.dataSets ?? []
@@ -296,7 +296,7 @@ open class PieChartView: PieRadarChartViewBase
         return -1
     }
     
-    /// - returns: An integer array of all the different angles the chart slices
+    /// - Returns: An integer array of all the different angles the chart slices
     /// have the angles in the returned array determine how much space (of 360°)
     /// each slice takes
     @objc open var drawAngles: [CGFloat]
@@ -304,7 +304,7 @@ open class PieChartView: PieRadarChartViewBase
         return _drawAngles
     }
 
-    /// - returns: The absolute angles of the different chart slices (where the
+    /// - Returns: The absolute angles of the different chart slices (where the
     /// slices end)
     @objc open var absoluteAngles: [CGFloat]
     {
@@ -313,7 +313,7 @@ open class PieChartView: PieRadarChartViewBase
     
     /// The color for the hole that is drawn in the center of the PieChart (if enabled).
     /// 
-    /// - note: Use holeTransparent with holeColor = nil to make the hole transparent.*
+    /// - Note: Use holeTransparent with holeColor = nil to make the hole transparent.*
     @objc open var holeColor: NSUIColor?
     {
         get
@@ -343,7 +343,7 @@ open class PieChartView: PieRadarChartViewBase
         }
     }
     
-    /// - returns: `true` if the inner tips of the slices are visible behind the hole, `false` if not.
+    /// `true` if the inner tips of the slices are visible behind the hole, `false` if not.
     @objc open var isDrawSlicesUnderHoleEnabled: Bool
     {
         return drawSlicesUnderHoleEnabled
@@ -363,7 +363,7 @@ open class PieChartView: PieRadarChartViewBase
         }
     }
     
-    /// - returns: `true` if the hole in the center of the pie-chart is set to be visible, `false` ifnot
+    /// `true` if the hole in the center of the pie-chart is set to be visible, `false` ifnot
     @objc open var isDrawHoleEnabled: Bool
     {
         get
@@ -390,7 +390,7 @@ open class PieChartView: PieRadarChartViewBase
             {
                 #if os(OSX)
                     let paragraphStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
-                    paragraphStyle.lineBreakMode = NSParagraphStyle.LineBreakMode.byTruncatingTail
+                    paragraphStyle.lineBreakMode = NSLineBreakMode.byTruncatingTail
                 #else
                     let paragraphStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
                     paragraphStyle.lineBreakMode = NSLineBreakMode.byTruncatingTail
@@ -399,9 +399,9 @@ open class PieChartView: PieRadarChartViewBase
                 
                 attrString = NSMutableAttributedString(string: newValue!)
                 attrString?.setAttributes([
-                    NSAttributedStringKey.foregroundColor: NSUIColor.black,
-                    NSAttributedStringKey.font: NSUIFont.systemFont(ofSize: 12.0),
-                    NSAttributedStringKey.paragraphStyle: paragraphStyle
+                    NSAttributedString.Key.foregroundColor: NSUIColor.black,
+                    NSAttributedString.Key.font: NSUIFont.systemFont(ofSize: 12.0),
+                    NSAttributedString.Key.paragraphStyle: paragraphStyle
                     ], range: NSMakeRange(0, attrString!.length))
             }
             self.centerAttributedText = attrString
@@ -450,7 +450,7 @@ open class PieChartView: PieRadarChartViewBase
         }
     }
     
-    /// - returns: `true` if drawing the center text is enabled
+    /// `true` if drawing the center text is enabled
     @objc open var isDrawCenterTextEnabled: Bool
     {
         get
@@ -474,13 +474,13 @@ open class PieChartView: PieRadarChartViewBase
         return _circleBox.width / 2.0
     }
     
-    /// - returns: The circlebox, the boundingbox of the pie-chart slices
+    /// The circlebox, the boundingbox of the pie-chart slices
     @objc open var circleBox: CGRect
     {
         return _circleBox
     }
     
-    /// - returns: The center of the circlebox
+    /// The center of the circlebox
     @objc open var centerCircleBox: CGPoint
     {
         return CGPoint(x: _circleBox.midX, y: _circleBox.midY)
@@ -546,31 +546,7 @@ open class PieChartView: PieRadarChartViewBase
             setNeedsDisplay()
         }
     }
-    
-    /// set this to true to draw the enrty labels into the pie slices
-    @objc @available(*, deprecated: 1.0, message: "Use `drawEntryLabelsEnabled` instead.")
-    open var drawSliceTextEnabled: Bool
-    {
-        get
-        {
-            return drawEntryLabelsEnabled
-        }
-        set
-        {
-            drawEntryLabelsEnabled = newValue
-        }
-    }
-    
-    /// - returns: `true` if drawing entry labels is enabled, `false` ifnot
-    @objc @available(*, deprecated: 1.0, message: "Use `isDrawEntryLabelsEnabled` instead.")
-    open var isDrawSliceTextEnabled: Bool
-    {
-        get
-        {
-            return isDrawEntryLabelsEnabled
-        }
-    }
-    
+        
     /// The color the entry labels are drawn with.
     @objc open var entryLabelColor: NSUIColor?
     {
@@ -607,7 +583,7 @@ open class PieChartView: PieRadarChartViewBase
         }
     }
     
-    /// - returns: `true` if drawing entry labels is enabled, `false` ifnot
+    /// `true` if drawing entry labels is enabled, `false` ifnot
     @objc open var isDrawEntryLabelsEnabled: Bool
     {
         get
@@ -630,7 +606,7 @@ open class PieChartView: PieRadarChartViewBase
         }
     }
     
-    /// - returns: `true` if drawing x-values is enabled, `false` ifnot
+    /// `true` if drawing x-values is enabled, `false` ifnot
     @objc open var isUsePercentValuesEnabled: Bool
     {
         get
