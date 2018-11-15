@@ -539,7 +539,12 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
             
             let h = getHighlightByTouchPoint(recognizer.location(in: self))
             
-            if h === nil || h == self.lastHighlighted
+            // RF: determine if tap is inside of content area, otherwise ignore highlight action (i.e. tap on legend)
+            let tapLocation = recognizer.location(in: self)
+            let heightWithAxis = self.viewPortHandler.chartHeight - self.legend.neededHeight - self.legend.yOffset
+            var contentRect = self.contentRect
+            contentRect = CGRect(x: contentRect.origin.x, y: 0, width: contentRect.size.width, height: heightWithAxis)
+            if h === nil || h == self.lastHighlighted || !contentRect.contains(tapLocation)
             {
                 lastHighlighted = nil
                 highlightValue(nil, callDelegate: true)
