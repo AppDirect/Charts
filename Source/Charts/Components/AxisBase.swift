@@ -143,7 +143,7 @@ open class AxisBase: ComponentBase
         return longest
     }
     
-    /// - returns: The formatted label at the specified index. This will either use the auto-formatter or the custom formatter (if one is set).
+    /// - Returns: The formatted label at the specified index. This will either use the auto-formatter or the custom formatter (if one is set).
     @objc open func getFormattedLabel(_ index: Int) -> String
     {
         if index < 0 || index >= entries.count
@@ -213,6 +213,16 @@ open class AxisBase: ComponentBase
     /// the total range of values this axis covers
     @objc open var axisRange = Double(0)
     
+    /// The minumum number of labels on the axis
+    @objc open var axisMinLabels = Int(2) {
+        didSet { axisMinLabels = axisMinLabels > 0 ? axisMinLabels : oldValue }
+    }
+    
+    /// The maximum number of labels on the axis
+    @objc open var axisMaxLabels = Int(25) {
+        didSet { axisMaxLabels = axisMaxLabels > 0 ? axisMaxLabels : oldValue }
+    }
+    
     /// the number of label entries the axis should have
     /// max = 25,
     /// min = 2,
@@ -226,13 +236,8 @@ open class AxisBase: ComponentBase
         }
         set
         {
-            _labelCount = newValue
-            
-            if _labelCount < 2
-            {
-                _labelCount = 2
-            }
-            
+            let range = axisMinLabels...axisMaxLabels as ClosedRange
+            _labelCount = newValue.clamped(to: range)
             forceLabelsEnabled = false
         }
     }
@@ -243,7 +248,7 @@ open class AxisBase: ComponentBase
         forceLabelsEnabled = force
     }
     
-    /// - returns: `true` if focing the y-label count is enabled. Default: false
+    /// `true` if focing the y-label count is enabled. Default: false
     @objc open var isForceLabelsEnabled: Bool { return forceLabelsEnabled }
     
     /// Adds a new ChartLimitLine to this axis.
@@ -271,7 +276,7 @@ open class AxisBase: ComponentBase
         _limitLines.removeAll(keepingCapacity: false)
     }
     
-    /// - returns: The LimitLines of this axis.
+    /// The LimitLines of this axis.
     @objc open var limitLines : [ChartLimitLine]
     {
         return _limitLines
@@ -294,23 +299,7 @@ open class AxisBase: ComponentBase
     }
     
     @objc open var isAxisMaxCustom: Bool { return _customAxisMax }
-    
-    /// This property is deprecated - Use `axisMinimum` instead.
-    @objc @available(*, deprecated: 1.0, message: "Use axisMinimum instead.")
-    open var axisMinValue: Double
-    {
-        get { return axisMinimum }
-        set { axisMinimum = newValue }
-    }
-    
-    /// This property is deprecated - Use `axisMaximum` instead.
-    @objc @available(*, deprecated: 1.0, message: "Use axisMaximum instead.")
-    open var axisMaxValue: Double
-    {
-        get { return axisMaximum }
-        set { axisMaximum = newValue }
-    }
-    
+        
     /// The minimum value for this axis.
     /// If set, this value will not be calculated automatically depending on the provided data.
     /// Use `resetCustomAxisMin()` to undo this.
@@ -346,8 +335,10 @@ open class AxisBase: ComponentBase
     }
     
     /// Calculates the minimum, maximum and range values of the YAxis with the given minimum and maximum values from the chart data.
-    /// - parameter dataMin: the y-min value according to chart data
-    /// - parameter dataMax: the y-max value according to chart
+    ///
+    /// - Parameters:
+    ///   - dataMin: the y-min value according to chart data
+    ///   - dataMax: the y-max value according to chart
     @objc open func calculate(min dataMin: Double, max dataMax: Double)
     {
         // if custom, use value as is, else use data value
