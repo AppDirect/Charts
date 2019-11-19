@@ -12,6 +12,14 @@
 import Foundation
 import CoreGraphics
 
+#if canImport(UIKit)
+    import UIKit
+#endif
+
+#if canImport(Cocoa)
+import Cocoa
+#endif
+
 @objc(ChartYAxisRenderer)
 open class YAxisRenderer: AxisRendererBase
 {
@@ -117,7 +125,7 @@ open class YAxisRenderer: AxisRendererBase
     }
     
     /// draws the y-labels on the specified x-position
-    internal func drawYLabels(
+    open func drawYLabels(
         context: CGContext,
         fixedPosition: CGFloat,
         positions: [CGPoint],
